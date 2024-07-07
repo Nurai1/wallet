@@ -1,36 +1,31 @@
-import React from "react";
+import React from 'react';
 
-import { RouterProvider, useRouteError } from "react-router";
-import { createBrowserRouter } from "react-router-dom";
-import { MainPage } from "./MainPage";
-import { WalletPage } from "./WalletPage";
+import { RouterProvider, useRouteError, Navigate } from 'react-router';
+import { createBrowserRouter } from 'react-router-dom';
+import { WalletPage } from './WalletPage';
 
 const ThrowDataApiRouterError = () => {
-  const error = useRouteError()
-  throw error
-}
+  const error = useRouteError();
+  throw error;
+};
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     errorElement: <ThrowDataApiRouterError />,
     children: [
-      { index: true, element: <MainPage /> },
+      { index: true, element: <Navigate to={'/wallet'} /> },
       {
         path: '/wallet',
-        element: (
-          <WalletPage />
-        ),
+        element: <WalletPage />,
       },
     ],
   },
-  { path: "*", element: <div>No such page</div> },
-])
+  { path: '*', element: <div>No such page</div> },
+]);
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
