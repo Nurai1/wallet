@@ -5,6 +5,10 @@ import { walletState } from './store/wallet';
 
 export const WalletPage = observer(function WalletPage() {
   const [newExpenseText, setNewExpenseText] = React.useState('');
+  const [btnsHover, setBtnsHover] = React.useState({
+    addBtnHover: false,
+    removeBtnHover: false,
+  });
   const [expenseValidation, setExpenseValidation] = React.useState({
     value: false,
     text: '',
@@ -22,11 +26,19 @@ export const WalletPage = observer(function WalletPage() {
       </View>
       <View style={styles.mediumValue}>
         <Text>Medium value: </Text>
-        <Text>{walletState.mediumExpense}</Text>
+        <Text style={{}}>{walletState.mediumExpense}</Text>
       </View>
       <View style={styles.mediumValue}>
         <Text>Approximate medium value left per day: </Text>
         <Text>{walletState.approximatePerDayLeft}</Text>
+      </View>
+      <View
+        style={{
+          marginTop: '10px',
+          // marginVertical: ""
+        }}
+      >
+        <Text style={{ color: '#303030' }}>Enter your expense:</Text>
       </View>
       <TextInput
         style={[styles.input, expenseValidation.value && styles.inputError]}
@@ -38,6 +50,18 @@ export const WalletPage = observer(function WalletPage() {
       />
       <Text style={styles.validationText}>{expenseValidation.text}</Text>
       <Pressable
+        onHoverIn={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            addBtnHover: true,
+          }));
+        }}
+        onHoverOut={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            addBtnHover: false,
+          }));
+        }}
         onPress={() => {
           if (!newExpenseText) {
             setExpenseValidation({ value: true, text: 'Required' });
@@ -52,10 +76,42 @@ export const WalletPage = observer(function WalletPage() {
             value: newExpenseText * 1,
           });
         }}
-        style={styles.addExpenseBtn}
+        style={[
+          styles.addExpenseBtn,
+          btnsHover.addBtnHover && {
+            backgroundColor: '#aadddd',
+          },
+        ]}
       >
         <View>
-          <Text>Add new expense</Text>
+          <Text style={styles.whiteColor}>Add new expense</Text>
+        </View>
+      </Pressable>
+      <Pressable
+        onHoverIn={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            removeBtnHover: true,
+          }));
+        }}
+        onHoverOut={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            removeBtnHover: false,
+          }));
+        }}
+        onPress={() => {
+          walletState.removeLastExpense();
+        }}
+        style={[
+          styles.removeExpenseBtn,
+          btnsHover.removeBtnHover && {
+            backgroundColor: '#eeffff',
+          },
+        ]}
+      >
+        <View>
+          <Text style={styles.lightBlueColor}>Remove last expense</Text>
         </View>
       </Pressable>
     </View>
@@ -77,6 +133,7 @@ const styles = StyleSheet.create({
   expensesList: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: '8px',
   },
   mediumValue: {
@@ -107,5 +164,23 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    '&:hover': {
+      backgroundColor: 'blue',
+    },
+  },
+  removeExpenseBtn: {
+    marginTop: '8px',
+    padding: '8px',
+    borderRadius: '4px',
+    border: '1px solid lightblue',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lightBlueColor: {
+    color: 'lightblue',
+  },
+  whiteColor: {
+    color: 'white',
   },
 });

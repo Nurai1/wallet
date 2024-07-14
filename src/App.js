@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RouterProvider, useRouteError, Navigate } from 'react-router';
+import { Navigate, RouterProvider, useRouteError } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import { WalletPage } from './WalletPage';
 

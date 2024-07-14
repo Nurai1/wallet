@@ -43,6 +43,10 @@ export class Wallet {
   addNewExpense(expense) {
     this.expenses.push(expense);
   }
+
+  removeLastExpense() {
+    this.expenses.pop();
+  }
 }
 
 export const walletState = new Wallet();
