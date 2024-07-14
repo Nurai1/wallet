@@ -2,12 +2,14 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { walletState } from './store/wallet';
+import { walletHistoryState } from './store/walletHistory';
 
 export const WalletPage = observer(function WalletPage() {
   const [newExpenseText, setNewExpenseText] = React.useState('');
   const [btnsHover, setBtnsHover] = React.useState({
     addBtnHover: false,
     removeBtnHover: false,
+    endBtnHover: false,
   });
   const [expenseValidation, setExpenseValidation] = React.useState({
     value: false,
@@ -112,6 +114,37 @@ export const WalletPage = observer(function WalletPage() {
       >
         <View>
           <Text style={styles.lightBlueColor}>Remove last expense</Text>
+        </View>
+      </Pressable>
+      <Pressable
+        onHoverIn={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            endBtnHover: true,
+          }));
+        }}
+        onHoverOut={() => {
+          setBtnsHover((s) => ({
+            ...s,
+            endBtnHover: false,
+          }));
+        }}
+        onPress={() => {
+          let isSure = window.confirm('Are you sure to end this month?');
+          if (isSure) {
+            walletHistoryState.saveMonthExpenses(walletState.expenses);
+            walletState.reset();
+          }
+        }}
+        style={[
+          styles.removeExpenseBtn,
+          btnsHover.endBtnHover && {
+            backgroundColor: '#eeffff',
+          },
+        ]}
+      >
+        <View>
+          <Text style={styles.lightBlueColor}>End current month</Text>
         </View>
       </Pressable>
     </View>

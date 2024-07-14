@@ -1,35 +1,39 @@
-// import { observable, makeObservable, action, computed, autorun } from 'mobx';
+import { observable, makeObservable, action, autorun } from 'mobx';
+import dayjs from 'dayjs';
 
-// export class WalletHistory {
-//   expenses = [];
+export class WalletHistory {
+  expensesByMonth = {};
 
-//   get mediumExpense() {
-//     return (
-//       this.expenses.reduce((acc, expense) => acc + expense.value, 0) /
-//       this.expenses.length
-//     );
-//   }
+  constructor() {
+    this.expensesByMonth = localStorage.getItem('expensesByMonth')
+      ? JSON.parse(localStorage.getItem('expensesByMonth'))
+      : {};
 
-//   constructor() {
-//     this.expenses = localStorage.getItem('expenses')
-//       ? JSON.parse(localStorage.getItem('expenses'))
-//       : [];
+    makeObservable(this, {
+      expensesByMonth: observable,
+      saveMonthExpenses: action,
+    });
+  }
 
-//     makeObservable(this, {
-//       expenses: observable,
-//       addNewExpense: action,
-//       mediumExpense: computed,
-//     });
-//   }
+  saveMonthExpenses(expenses) {
+    const lastMonthDate = dayjs().set('month', dayjs().month() - 1);
+    // const daysInMonthLastMonth = lastMonthDate.daysInMonth();
 
-//   addNewExpense(expense) {
-//     this.expenses.push(expense);
-//   }
-// }
+    this.expensesByMonth[
+      `${lastMonthDate.format('DD/MM/YYYY')} - ${dayjs().format('DD/MM/YYYY')}`
+    ] = expenses;
+  }
+}
 
-// export const walletState = new Wallet();
+export const walletHistoryState = new WalletHistory();
 
-// autorun(() => {
-//   console.log('Set Expenses to local storage:', walletState.expenses);
-//   localStorage.setItem('expenses', JSON.stringify(walletState.expenses));
-// });
+autorun(() => {
+  console.log(
+    'Set Expenses History to local storage:',
+    walletHistoryState.expensesByMonth
+  );
+  localStorage.setItem(
+    'expensesByMonth',
+    JSON.stringify(walletHistoryState.expensesByMonth)
+  );
+});

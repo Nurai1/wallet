@@ -11,7 +11,8 @@ export class Wallet {
   }
 
   get mediumExpense() {
-    return (this.sumExpenses / this.expenses.length).toFixed(2);
+    const medium = this.sumExpenses / this.expenses.length;
+    return isNaN(medium) ? 0 : medium.toFixed(2);
   }
 
   get daysPassed() {
@@ -33,6 +34,8 @@ export class Wallet {
     makeObservable(this, {
       expenses: observable,
       addNewExpense: action,
+      removeLastExpense: action,
+      reset: action,
       sumExpenses: computed,
       mediumExpense: computed,
       daysPassed: computed,
@@ -46,6 +49,10 @@ export class Wallet {
 
   removeLastExpense() {
     this.expenses.pop();
+  }
+
+  reset() {
+    this.expenses = [];
   }
 }
 
