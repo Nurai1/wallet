@@ -26,9 +26,15 @@ export const WalletPage = observer(function WalletPage() {
           </View>
         ))}
       </View>
-      <View style={styles.mediumValue}>
-        <Text>Medium value: </Text>
-        <Text style={{}}>{walletState.mediumExpense}</Text>
+      <View style={styles.infoWrapper}>
+        <View style={styles.mediumValue}>
+          <Text>Medium value: </Text>
+          <Text style={{}}>{walletState.mediumExpense}</Text>
+        </View>
+        <View style={styles.mediumValue}>
+          <Text>Days passed: </Text>
+          <Text style={{}}>{walletState.daysPassed}</Text>
+        </View>
       </View>
       <View style={styles.mediumValue}>
         <Text>Approximate medium value left per day: </Text>
@@ -77,6 +83,8 @@ export const WalletPage = observer(function WalletPage() {
             id: crypto.randomUUID(),
             value: newExpenseText * 1,
           });
+
+          setNewExpenseText('');
         }}
         style={[
           styles.addExpenseBtn,
@@ -168,6 +176,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: '8px',
+  },
+  infoWrapper: {
+    flexDirection: 'row',
+    display: 'flex',
+    gap: '16px',
   },
   mediumValue: {
     marginTop: '8px',
