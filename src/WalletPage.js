@@ -116,7 +116,10 @@ export const WalletPage = observer(function WalletPage() {
           }));
         }}
         onPress={() => {
-          walletState.removeLastExpense();
+          let isSure = window.confirm('Are you sure to remove last expense?');
+          if (isSure) {
+            walletState.removeLastExpense();
+          }
         }}
         style={[
           styles.removeExpenseBtn,
