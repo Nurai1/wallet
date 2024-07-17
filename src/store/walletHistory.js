@@ -1,5 +1,5 @@
 import { observable, makeObservable, action, autorun } from 'mobx';
-import dayjs from 'dayjs';
+import { customDayjs } from "../utils/customDayjs"
 
 export class WalletHistory {
   expensesByMonth = {};
@@ -16,11 +16,11 @@ export class WalletHistory {
   }
 
   saveMonthExpenses(expenses) {
-    const lastMonthDate = dayjs().set('month', dayjs().month() - 1);
+    const lastMonthDate = customDayjs().set('month', customDayjs().month() - 1);
     // const daysInMonthLastMonth = lastMonthDate.daysInMonth();
 
     this.expensesByMonth[
-      `${lastMonthDate.format('DD/MM/YYYY')} - ${dayjs().format('DD/MM/YYYY')}`
+      `${lastMonthDate.format('DD/MM/YYYY')} - ${customDayjs().format('DD/MM/YYYY')}`
     ] = expenses;
   }
 }

@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { walletState } from './store/wallet';
 import { walletHistoryState } from './store/walletHistory';
+import { customDayjs } from "./utils/customDayjs"
 
 export const WalletPage = observer(function WalletPage() {
   const [newExpenseText, setNewExpenseText] = React.useState('');
@@ -34,6 +35,10 @@ export const WalletPage = observer(function WalletPage() {
         <View style={styles.mediumValue}>
           <Text>Days passed: </Text>
           <Text style={{}}>{walletState.daysPassed}</Text>
+        </View>
+        <View style={styles.mediumValue}>
+          <Text>Last added at: </Text>
+          <Text style={{}}>{customDayjs(walletState.lastDateExpenseAdded).format('DD/MM')}</Text>
         </View>
       </View>
       <View style={styles.mediumValue}>

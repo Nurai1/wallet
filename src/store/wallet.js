@@ -1,10 +1,12 @@
-import { observable, makeObservable, action, computed, autorun } from 'mobx';
+import { action, autorun, computed, makeObservable, observable } from 'mobx';
+import { customDayjs } from "../utils/customDayjs"
 
 const DAYS_PER_MONTH = 30;
 const DOLLARS_PER_DAY_LIMIT = 50;
 
 export class Wallet {
   expenses = [];
+  lastDateExpenseAdded = null;
 
   get sumExpenses() {
     return this.expenses.reduce((acc, expense) => acc + expense.value, 0);
@@ -31,11 +33,15 @@ export class Wallet {
       ? JSON.parse(localStorage.getItem('expenses'))
       : [];
 
+    this.lastDateExpenseAdded = localStorage.getItem("lastDateExpenseAdded")
+
     makeObservable(this, {
       expenses: observable,
+      lastDateExpenseAdded: observable,
       addNewExpense: action,
       removeLastExpense: action,
       reset: action,
+      updateLastDateExpenseAdded: action,
       sumExpenses: computed,
       mediumExpense: computed,
       daysPassed: computed,
@@ -45,6 +51,7 @@ export class Wallet {
 
   addNewExpense(expense) {
     this.expenses.push(expense);
+    this.updateLastDateExpenseAdded()
   }
 
   removeLastExpense() {
@@ -53,6 +60,11 @@ export class Wallet {
 
   reset() {
     this.expenses = [];
+  }
+
+  updateLastDateExpenseAdded() {
+    this.lastDateExpenseAdded = customDayjs().format()
+    localStorage.setItem("lastDateExpenseAdded", this.lastDateExpenseAdded)
   }
 }
 
